@@ -15,7 +15,7 @@ npm i @xdcobra/node-ffmpeg-stream
 
 ### On server
 ```
-Stream = require('node-ffmpeg-stream').WebsocketStream;
+Stream = require('@xdcobra/node-ffmpeg-stream').WebsocketStream;
 stream = new Stream({
   name: 'name',//name that can be used in future  
   url: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4',  //Stream URL
@@ -58,7 +58,7 @@ stream.stop();
 ## RTSP Stream to Recording
 ### On server
 ```
-RecordNSnap = require('node-ffmpeg-stream').RecordNSnap;  
+RecordNSnap = require('@xdcobra/node-ffmpeg-stream').RecordNSnap;  
 
 var input ={
     "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4",
@@ -107,7 +107,7 @@ input = {
 ## RTSP Stream to Screenshot
 ### On server
 ```
-RecordNSnap = require('node-ffmpeg-stream').RecordNSnap; 
+RecordNSnap = require('@xdcobra/node-ffmpeg-stream').RecordNSnap; 
 
 
 var input = {
@@ -155,7 +155,7 @@ input = {
 ## RTSP Stream to Picturestream
 First, define the options for creating a picture stream.
 ```
-PictureStream = require("node-ffmpeg-stream").PictureStream;
+PictureStream = require("@xdcobra/node-ffmpeg-stream").PictureStream;
 
 var input = {
     "name": "BigBunny",
@@ -188,7 +188,7 @@ You are able to publish an RTSP Stream via MQTT. In this example, I stream a RTS
 ### On server
 First, define the options for creating a picture stream.
 ```
-PictureStream = require("node-ffmpeg-stream").PictureStream;
+PictureStream = require("@xdcobra/node-ffmpeg-stream").PictureStream;
 var mqtt = require("mqtt");
 
 var input = {
