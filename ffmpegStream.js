@@ -1,4 +1,4 @@
-
+var fs = require("fs")
 const WebSocket = require('ws');
 var EventEmitter = require('events');     
 const child_process = require('child_process')
