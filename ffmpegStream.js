@@ -129,10 +129,8 @@ class WebsocketStream extends EventEmitter {
 
 class PictureStream extends EventEmitter {
 
-    constructor(input) {
+    constructor() {
         super();
-        this.name = input.name
-        this.startStream(input)
     }
 
     setOptions(input) {
@@ -169,11 +167,10 @@ class PictureStream extends EventEmitter {
     }
 
     startStream = function (input) {
-        console.log(this.setOptions(input))
         this.child = child_process.spawn("ffmpeg", this.setOptions(input), {
             detached: false
         });
-        console.log(this.name + " Stream Started...");
+        console.log(input.name + " Stream Started...");
         this.child.stdout.on("data", (data) => {
             this.emit("data", data)
         });
@@ -189,6 +186,11 @@ class PictureStream extends EventEmitter {
         })
         
         return this
+    }
+
+    stopStream = function () {
+        this.child.kill();
+        return this;
     }
 }
 

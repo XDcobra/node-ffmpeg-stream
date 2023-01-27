@@ -170,16 +170,65 @@ var input = {
 Then create the callbacks for the picture stream object. On the data callback, you receive the .png image for every frame.
 ```
 // create stream
-pictureStream = new PictureStream(input);
+pictureStream = new PictureStream();
 
 // callbacks
-pictureStream
+pstream = pictureStream.startStream(input)
+pstream
     .on("data", data => {
         console.log(data)
     })
     .on("error", error => {
         console.log(error)
     })
+```
+
+```
+#### To stop a running pictureStream 
+
+This method should be called when you don't want to capture pictures from the rtsp stream anymore.
+```
+pstream.stopStream();
+```
+
+### To restart a stopped pictureStream
+Once a pictureStream was stopped with stopStream(), you can simply restart it again by using the startStream(input) function again. See this example, where a stream was started, stopped and then restarted.
+You don't even need to set the callbacks again, as they are still set.
+```
+// create stream options
+var input = {
+    "name": "BigBunny",
+    "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4",
+    "fps": 30,
+    "ffmpegOptions": {
+        "-vf": "scale=200:160",
+    }
+}
+
+// create stream
+pictureStream = new PictureStream();
+
+// callbacks
+pstream = pictureStream.startStream(input)
+pstream
+    .on("data", data => {
+        // encode to base64
+        base64 = Buffer.from(data).toString('base64');
+
+        // publish
+        mqttClient.publish("televersuch/image", base64)
+
+        console.log("Published!")
+    })
+    .on("error", error => {
+        console.log(error)
+    })
+
+// stop stream
+pstream.stopStream();
+
+// restart stream
+pstream.startStream(input)
 ```
 
 ## RTSP Stream to MQTT
@@ -202,9 +251,10 @@ var input = {
 ```
 
 Then create the callbacks for the picture stream object. On the data callback, you receive the .png image for every frame.
+Don't forget to stop the picturestream (picturestream.stop()), once you don't want to record the pictures from the rtsp stream anymore.
 ```
 // create stream
-pictureStream = new PictureStream(input);
+pictureStream = new PictureStream();
 
 // create mqtt client
 mqttClient = mqtt.connect("ws://127.0.0.1:9007", {})    // simply switch between ws or mqtt protocol
@@ -212,8 +262,11 @@ mqttClient = mqtt.connect("ws://127.0.0.1:9007", {})    // simply switch between
         console.log("connected");
     });
 
+// start the stream
+pstream = pictureStream.startStream(input)
+
 // callbacks
-pictureStream
+pstream
     .on("data", data => {
         // encode to base64, to show it later in browser
         base64 = Buffer.from(data).toString('base64');
