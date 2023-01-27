@@ -6,7 +6,7 @@ const {
     exec
 } = require("child_process");
 
-class Stream extends EventEmitter {
+class WebsocketStream extends EventEmitter {
 
     constructor(input) {
         super();
@@ -126,6 +126,73 @@ class Stream extends EventEmitter {
 
 
 }
+
+class PictureStream extends EventEmitter {
+
+    constructor(input) {
+        super();
+        this.name = input.name
+        this.startStream(input)
+    }
+
+    setOptions(input) {
+        const options = {
+            "-rtsp_transport": "udp",
+            "-i": input.url,
+            "-filter:v": "fps=fps=" + (input.fps ? input.fps : 30),
+            "-r": input.ffmpegOptions["-r"] ? input.ffmpegOptions["-r"] : 30,
+            "-vsync": "0",
+            "-f": "image2pipe",
+            "-": ""
+        };
+        let params = [];
+        for (let key in options) {
+            params.push(key);
+            if (String(options[key]) !== "") {
+                params.push(String(options[key]));
+            }
+        }
+        this.additionalFlags = []
+        if (input.ffmpegOptions) {
+            for (let key in input.ffmpegOptions) {
+                if (key !== '-r') {
+                    this.additionalFlags.push(key)
+                    if (String(input.ffmpegOptions[key]) !== '') {
+                        this.additionalFlags.push(String(input.ffmpegOptions[key]))
+                    }
+                }
+            }
+        }
+        params.push(...this.additionalFlags);
+
+        return params;
+    }
+
+    startStream = function (input) {
+        console.log(this.setOptions(input))
+        this.child = child_process.spawn("ffmpeg", this.setOptions(input), {
+            detached: false
+        });
+        console.log(this.name + " Stream Started...");
+        this.child.stdout.on("data", (data) => {
+            this.emit("data", data)
+        });
+        this.child.stderr.on("data", (data) => {
+            this.emit("error", data.toString())
+        });
+        this.child.on("exit", (code, signal) => {
+            if (code === 1) {
+                console.error("RTSP stream exited with error");
+                this.exitCode = 1
+                return this.emit("error", "exitWithError")
+            }
+        })
+        
+        return this
+    }
+}
+
+
 class RecordNSnap extends EventEmitter {
 
     recordVideo = function (input, callback) {
@@ -302,11 +369,8 @@ class RecordNSnap extends EventEmitter {
 
 }
 
-class Record4MQTT extends EventEmitter {
-
-}
 module.exports = {
-    Stream: Stream,
+    WebsocketStream: WebsocketStream,
     RecordNSnap: RecordNSnap,
-    Record4MQTT: Record4MQTT
+    PictureStream: PictureStream
 }
