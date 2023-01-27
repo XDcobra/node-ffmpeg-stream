@@ -226,7 +226,7 @@ pictureStream
     })
 ```
 
-### On client javascript
+### On client javascript (client_backend.js)
 ```
 window.onload = async function () {
     m = new mqtt_fetch("my");
@@ -241,7 +241,7 @@ function showImage(data) {
         let node = document.createElement("img");
         node.setAttribute("id", "finalImage");
         node.setAttribute("src", "data:image/png;base64," + data);
-        document.getElementById("image").appendChild(node);
+        document.getElementById("stream").appendChild(node);
     }
 }
 ```
@@ -253,7 +253,7 @@ function showImage(data) {
 <head>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
     <script type="text/javascript" src="./mqtt-fetch-paho.js"></script>
-    <script type="text/javascript" src="./backend.js"></script>
+    <script type="text/javascript" src="./client_backend.js"></script>
 </head>
 <body>
     <div id="stream">
