@@ -6,6 +6,11 @@ To convert rtsp stream to websocket stream for multi view purpose
 4. [RTSP Stream to Picturestream(Get picture by picture)](#rtsp-stream-to-picturestream)
 5. [RTSP Stream to MQTT(Publish stream to MQTT Broker)](#rtsp-stream-to-mqtt)
 
+## Usage
+```
+npm i @xdcobra/node-ffmpeg-stream
+```
+
 ## RTSP Stream to Websocket
 
 ### On server

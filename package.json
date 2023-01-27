@@ -1,34 +1,10 @@
 {
-  "_from": "node-ffmpeg-stream@^1.0.2",
-  "_id": "node-ffmpeg-stream@1.0.3",
-  "_inBundle": false,
-  "_integrity": "sha512-LclTgZvJ+CogUe8ZxiqHr+yqW2YHRxo68Hfy9pk0wew7dfiKGKkhiByHVvKNA5XEBQR0FpO/1qCZ0hqScx+lzw==",
-  "_location": "/node-ffmpeg-stream",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "range",
-    "registry": true,
-    "raw": "node-ffmpeg-stream@^1.0.2",
-    "name": "node-ffmpeg-stream",
-    "escapedName": "node-ffmpeg-stream",
-    "rawSpec": "^1.0.2",
-    "saveSpec": null,
-    "fetchSpec": "^1.0.2"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/node-ffmpeg-stream/-/node-ffmpeg-stream-1.0.3.tgz",
-  "_shasum": "57c84e68f5a15e5490e2f9d7f3ca0a76de457e76",
-  "_spec": "node-ffmpeg-stream@^1.0.2",
-  "_where": "E:\\Office\\Repo\\cube.api.eaxis\\cube.api.eaxis.cctv\\cctv",
   "author": {
-    "name": "Kannan Krishnan",
-    "email": "kannaa.krishnaa@gmail.com"
+    "name": "xdcobra",
+    "email": "xdcobra11@gmail.com"
   },
   "bugs": {
-    "url": "https://github.com/uk2nk/node-ffmpeg-stream/issues"
+    "url": "https://github.com/XDcobra/node-ffmpeg-stream/issues"
   },
   "bundleDependencies": [],
   "dependencies": {
@@ -36,8 +12,8 @@
     "ws": "^7.5.9"
   },
   "deprecated": false,
-  "description": "To convert rtsp stream to WebSocket Stream for multi view purpose",
-  "homepage": "https://github.com/uk2nk/node-ffmpeg-stream#readme",
+  "description": "To convert rtsp stream to multiple purposes, like websockets, recordings, screenshots, picturestream or MQTT",
+  "homepage": "https://github.com/XDcobra/node-ffmpeg-stream#readme",
   "keywords": [
     "node",
     "rtsp",
@@ -58,15 +34,15 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "name": "node-ffmpeg-stream",
+  "name": "@xdcobra/node-ffmpeg-stream",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uk2nk/node-ffmpeg-stream.git"
+    "url": "git+https://github.com/XDcobra/node-ffmpeg-stream.git"
   },
   "scripts": {
     "test": "mocha --timeout 30000"
   },
   "readme": "README.md",
   "readmeFilename": "README.md",
-  "version": "1.1.0"
+  "version": "1.0.0"
 }
