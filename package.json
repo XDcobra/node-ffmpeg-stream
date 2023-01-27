@@ -30,9 +30,9 @@
   "bugs": {
     "url": "https://github.com/uk2nk/node-ffmpeg-stream/issues"
   },
-  "bundleDependencies": false,
-  "dependencies": {    
-    "ws": "^7.0.0"
+  "bundleDependencies": [],
+  "dependencies": {
+    "ws": "^7.5.9"
   },
   "deprecated": false,
   "description": "To convert rtsp stream to WebSocket Stream for multi view purpose",
