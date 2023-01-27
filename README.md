@@ -3,7 +3,8 @@ To convert rtsp stream to websocket stream for multi view purpose
 1. [RTSP Stream to Websocket](#rtsp-stream-to-websocket)
 2. [RTSP Stream to Recording(Download & Storing into the file location)](#rtsp-stream-to-recording)
 3. [RTSP Stream to Screenshot(Take picture from Stream)](#rtsp-stream-to-screenshot)
-4. [RSTP Stream to Picturestream](Get picture by picture)(#rtsp-stream-to-picturestream)
+4. [RTSP Stream to Picturestream(Get picture by picture)](#rtsp-stream-to-picturestream)
+5. [RTSP Stream to MQTT(Publish stream to MQTT Broker)](#rtsp-stream-to-mqtt)
 
 ## RTSP Stream to Websocket
 
