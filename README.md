@@ -4,16 +4,12 @@ To convert rtsp stream to websocket stream for multi view purpose
 2. [RTSP Stream to Recording(Download & Storing into the file location)](#rtsp-stream-to-recording)
 3. [RTSP Stream to Screenshot(Take picture from Stream)](#rtsp-stream-to-screenshot)
 4. [RSTP Stream to Picturestream](Get picture by picture)(#rtsp-stream-to-picturestream)
-### Usage:
 
-```
-$ npm i node-ffmpeg-stream
-```
 ## RTSP Stream to Websocket
 
 ### On server
 ```
-Stream = require('node-ffmpeg-stream').Stream;
+Stream = require('node-ffmpeg-stream').WebsocketStream;
 stream = new Stream({
   name: 'name',//name that can be used in future  
   url: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4',  //Stream URL
@@ -153,6 +149,8 @@ input = {
 ## RTSP Stream to Picturestream
 First, define the options for creating a picture stream.
 ```
+PictureStream = require("node-ffmpeg-stream").PictureStream;
+
 var input = {
     "name": "BigBunny",
     "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4",
@@ -184,6 +182,9 @@ You are able to publish an RTSP Stream via MQTT. In this example, I stream a RTS
 ### On server
 First, define the options for creating a picture stream.
 ```
+PictureStream = require("node-ffmpeg-stream").PictureStream;
+var mqtt = require("mqtt");
+
 var input = {
     "name": "BigBunny",
     "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4",
