@@ -3,6 +3,7 @@ To convert rtsp stream to websocket stream for multi view purpose
 1. [RTSP Stream to Websocket](#rtsp-stream-to-websocket)
 2. [RTSP Stream to Recording(Download & Storing into the file location)](#rtsp-stream-to-recording)
 3. [RTSP Stream to Screenshot(Take picture from Stream)](#rtsp-stream-to-screenshot)
+4. [RSTP Stream to Picturestream](Get picture by picture)(#rtsp-stream-to-picturestream)
 ### Usage:
 
 ```
@@ -149,9 +150,114 @@ input = {
 ```
 ![CMD File Store Output](/assets/screenshot/snap.store.PNG)
 
+## RTSP Stream to Picturestream
+First, define the options for creating a picture stream.
+```
+var input = {
+    "name": "BigBunny",
+    "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4",
+    "fps": 30,
+    "ffmpegOptions": {
+        "-vf": "scale=200:160",
+    }
+}
+```
 
+Then create the callbacks for the picture stream object. On the data callback, you receive the .png image for every frame.
+```
+// create stream
+pictureStream = new PictureStream(input);
+
+// callbacks
+pictureStream
+    .on("data", data => {
+        console.log(data)
+    })
+    .on("error", error => {
+        console.log(error)
+    })
+```
+
+## RTSP Stream to MQTT
+You are able to publish an RTSP Stream via MQTT. In this example, I stream a RTSP Stream to a Browser via MQTT.
+
+### On server
+First, define the options for creating a picture stream.
+```
+var input = {
+    "name": "BigBunny",
+    "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4",
+    "fps": 30,
+    "ffmpegOptions": {
+        "-vf": "scale=200:160",
+    }
+}
+```
+
+Then create the callbacks for the picture stream object. On the data callback, you receive the .png image for every frame.
+```
+// create stream
+pictureStream = new PictureStream(input);
+
+// create mqtt client
+mqttClient = mqtt.connect("ws://127.0.0.1:9007", {})    // simply switch between ws or mqtt protocol
+    .on("connect", function () {
+        console.log("connected");
+    });
+
+// callbacks
+pictureStream
+    .on("data", data => {
+        // encode to base64, to show it later in browser
+        base64 = Buffer.from(data).toString('base64');
+
+        // publish
+        mqttClient.publish("my/exampleTopic", base64)
+    })
+    .on("error", error => {
+        console.log(error)
+    })
+```
+
+### On client javascript
+```
+window.onload = async function () {
+    m = new mqtt_fetch("my");
+    await m.init("localhost", 9007); // MQTT over websockets!!
+    m.set_callback("my/exampleTopic", showImage, false);
+}
+
+function showImage(data) {
+    if (document.getElementById("finalImage") != null) {
+        document.getElementById("finalImage").setAttribute("src", "data:image/png;base64, " + data);
+    } else {
+        let node = document.createElement("img");
+        node.setAttribute("id", "finalImage");
+        node.setAttribute("src", "data:image/png;base64," + data);
+        document.getElementById("image").appendChild(node);
+    }
+}
+```
+
+### On client html
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+    <script type="text/javascript" src="./mqtt-fetch-paho.js"></script>
+    <script type="text/javascript" src="./backend.js"></script>
+</head>
+<body>
+    <div id="stream">
+
+        </div>
+</body>
+</html>
+```
 
 ## Dependencies
 
 1. [FFMPEG.exe](https://ffmpeg.org/download.html) - exe file should be in same place of js file
 2. [jsmpeg.min.js](https://cdnjs.com/libraries/jsmpeg)
+3. [mqtt-fetch.js](https://github.com/informatik-aalen/mqtt-fetch.js) -  make sure you use mqtt-fetch-paho.js
