@@ -184,7 +184,7 @@ pstream
 ```
 
 
-#### To stop a running pictureStream 
+### To stop a running pictureStream 
 
 This method should be called when you don't want to capture pictures from the rtsp stream anymore.
 ```
