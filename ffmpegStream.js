@@ -135,7 +135,7 @@ class PictureStream extends EventEmitter {
 
     setOptions(input) {
         const options = {
-            "-rtsp_transport": "udp",
+            "-rtsp_transport": "tcp",
             "-i": input.url,
             "-filter:v": "fps=fps=" + (input.fps ? input.fps : 30),
             "-r": input.ffmpegOptions["-r"] ? input.ffmpegOptions["-r"] : 30,
@@ -189,7 +189,19 @@ class PictureStream extends EventEmitter {
     }
 
     stopStream = function () {
-        this.child.kill();
+        if (this.child == undefined) {
+            this.emit("error", "No Stream to stop was found!")
+            return this;
+        } else {
+            try {
+                this.child.kill();
+            } catch (error) {
+                this.emit("error", error)
+                return this;
+            }
+        }
+        
+        
         return this;
     }
 }
