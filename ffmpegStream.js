@@ -206,6 +206,83 @@ class PictureStream extends EventEmitter {
     }
 }
 
+class PictureStreamUSB extends EventEmitter {
+
+    constructor() {
+        super();
+    }
+
+    setOptions(input) {
+        const options = {
+            "-input_format": input.ffmpegOptions["-input_format"] ? input.ffmpegOptions["-input_format"] : "h264",
+            "-video_size": input.ffmpegOptions["-video_size"] ? input.ffmpegOptions["-video_size"] : "1280x720",
+            "-framerate": input.ffmpegOptions["-framerate"] ? input.ffmpegOptions["-framerate"] : 30,
+            "-i": input.url ? input.url : "/dev/video0",
+            "-f": "image2pipe",
+            "-": ""
+        };
+        let params = [];
+        for (let key in options) {
+            params.push(key);
+            if (String(options[key]) !== "") {
+                params.push(String(options[key]));
+            }
+        }
+        this.additionalFlags = []
+        if (input.ffmpegOptions) {
+            for (let key in input.ffmpegOptions) {
+                if (key !== '-r' && params.findIndex(e => e == key) < 0) {
+                    this.additionalFlags.push(key)
+                    if (String(input.ffmpegOptions[key]) !== '') {
+                        this.additionalFlags.push(String(input.ffmpegOptions[key]))
+                    }
+                }
+            }
+        }
+        params.push(...this.additionalFlags);
+        return params;
+    }
+
+    startStream = function (input) {
+        this.child = child_process.spawn("ffmpeg", this.setOptions(input), {
+            detached: false
+        });
+        console.log(input.name + " Stream Started...");
+        this.child.stdout.on("data", (data) => {
+            this.emit("data", data)
+        });
+        this.child.stderr.on("data", (data) => {
+            this.emit("error", data.toString())
+        });
+        this.child.on("exit", (code, signal) => {
+            if (code === 1) {
+                console.error("USB stream exited with error");
+                this.exitCode = 1
+                return this.emit("error", "exitWithError")
+            }
+        })
+
+        return this
+    }
+
+    stopStream = function () {
+        if (this.child == undefined) {
+            this.emit("error", "No Stream to stop was found!")
+            return this;
+        } else {
+            try {
+                this.child.kill();
+            } catch (error) {
+                this.emit("error", error)
+                return this;
+            }
+        }
+
+
+        return this;
+    }
+}
+
 
 class RecordNSnap extends EventEmitter {
 
@@ -386,5 +463,6 @@ class RecordNSnap extends EventEmitter {
 module.exports = {
     WebsocketStream: WebsocketStream,
     RecordNSnap: RecordNSnap,
-    PictureStream: PictureStream
+    PictureStream: PictureStream,
+    PictureStreamUSB: PictureStreamUSB
 }
